@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Study Assistant - Get instant help with any topic">
+    <title>AI Assistant - StudyHub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>StudyHub</span>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="flashcards.html" class="nav-link">Flashcards</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="ai-assistant.html" class="nav-link active">AI Assistant</a>
+                <a href="community.html" class="nav-link">Community</a>
+            </div>
+
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">
+                    <i class="fas fa-robot" style="color: var(--accent);"></i>
+                    AI Study Assistant
+                </h1>
+                <p class="section-description">
+                    Ask anything, get explanations, request examples - your 24/7 AI tutor powered by DeepSeek
+                </p>
+            </div>
+
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <button class="btn btn-secondary btn-sm" id="configAIBtn">
+                        <i class="fas fa-cog"></i> Configure API Key
+                    </button>
+                    <button class="btn btn-accent btn-sm" id="generateFlashcardsBtn">
+                        <i class="fas fa-magic"></i> Generate Flashcards
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="clearChatBtn">
+                        <i class="fas fa-trash"></i> Clear Chat
+                    </button>
+                </div>
+
+                <!-- Chat Container -->
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="chat-message ai-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>👋 Hi! I'm your AI study assistant. I can help you with:</p>
+                                <p>• Explaining complex topics<br>
+                                    • Solving problems step-by-step<br>
+                                    • Providing study tips and resources<br>
+                                    • Generating flashcards on any topic<br>
+                                    • Answering questions about any subject</p>
+                                <p style="margin-top: 1rem; font-style: italic; color: var(--text-secondary);">
+                                    💡 Try asking: "Explain photosynthesis" or "Help me understand React hooks"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <textarea id="chatInput" class="chat-input" placeholder="Ask me anything about your studies..."
+                            rows="1"></textarea>
+                        <button class="btn btn-primary" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Config Modal -->
+    <div id="apiConfigModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> API Configuration</h3>
+                <button class="modal-close" onclick="closeModal('apiConfigModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="apiConfigContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="common.js"></script>
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChatHistory();
+
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            document.getElementById('configAIBtn').addEventListener('click', () => openAPIConfig('deepseek'));
+            document.getElementById('generateFlashcardsBtn').addEventListener('click', generateFlashcards);
+            document.getElementById('clearChatBtn').addEventListener('click', clearChat);
+
+            // Auto-resize textarea
+            const input = document.getElementById('chatInput');
+            input.addEventListener('input', function () {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+
+        // Send Message
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Show typing indicator
+            const typingId = addMessage('Thinking...', 'ai', true);
+
+            try {
+                const response = await callDeepSeekAPI([
+                    {
+                        role: 'system',
+                        content: 'You are a helpful AI study assistant for college students. Provide clear, concise explanations. Use examples when helpful. Keep responses focused and educational.'
+                    },
+                    ...AppState.chatHistory.slice(-10).map(msg => ({
+                        role: msg.role,
+                        content: msg.content
+                    })),
+                    {
+                        role: 'user',
+                        content: message
+                    }
+                ]);
+
+                removeMessage(typingId);
+                addMessage(response, 'assistant');
+            } catch (error) {
+                removeMessage(typingId);
+                addMessage('Sorry, I encountered an error. Please check your API key and try again.', 'assistant');
+            }
+        }
+
+        // Add Message
+        function addMessage(content, role, isTyping = false) {
+            const container = document.getElementById('chatMessages');
+            const messageId = generateId();
+
+            const messageClass = role === 'user' ? 'user-message' : 'ai-message';
+            const icon = role === 'user' ? 'fa-user' : 'fa-robot';
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${messageClass}`;
+            messageDiv.id = messageId;
+
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="message-content">
+                    ${isTyping ? `<p><em>${escapeHtml(content)}</em></p>` : `<p>${formatMessage(content)}</p>`}
+                </div>
+            `;
+
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+
+            // Save to history (unless typing)
+            if (!isTyping) {
+                const history = AppState.chatHistory;
+                history.push({
+                    id: messageId,
+                    role: role === 'user' ? 'user' : 'assistant',
+                    content: content,
+                    timestamp: new Date().toISOString()
+                });
+                AppState.chatHistory = history;
+            }
+
+            return messageId;
+        }
+
+        // Remove Message
+        function removeMessage(id) {
+            const msg = document.getElementById(id);
+            if (msg) msg.remove();
+        }
+
+        // Load Chat History
+        function loadChatHistory() {
+            const container = document.getElementById('chatMessages');
+            const history = AppState.chatHistory;
+
+            history.forEach(msg => {
+                if (msg.role === 'user' || msg.role === 'assistant') {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `chat-message ${msg.role === 'user' ? 'user-message' : 'ai-message'}`;
+                    messageDiv.id = msg.id;
+
+                    const icon = msg.role === 'user' ? 'fa-user' : 'fa-robot';
+
+                    messageDiv.innerHTML = `
+                        <div class="message-avatar">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>${formatMessage(msg.content)}</p>
+                        </div>
+                    `;
+
+                    container.appendChild(messageDiv);
+                }
+            });
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Generate Flashcards from Chat
+        async function generateFlashcards() {
+            const topic = prompt('Enter a topic to generate flashcards:');
+            if (!topic) return;
+
+            const btn = document.getElementById('generateFlashcardsBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+            try {
+                await generateFlashcardsAI(topic);
+                showToast(`Flashcards generated! Check the Flashcards page.`, 'success');
+            } catch (error) {
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-magic"></i> Generate Flashcards';
+            }
+        }
+
+        // Clear Chat
+        function clearChat() {
+            if (!confirm('Clear entire chat history?')) return;
+
+            AppState.chatHistory = [];
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = `
+                <div class="chat-message ai-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Chat cleared! How can I help you today?</p>
+                    </div>
+                </div>
+            `;
+            showToast('Chat history cleared', 'success');
+        }
+    </script>
+</body>
+
+</html>

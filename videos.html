@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Recommended Educational Videos - Find the best YouTube videos for any topic">
+    <title>Smart Video Search - StudyHub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>StudyHub</span>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="flashcards.html" class="nav-link">Flashcards</a>
+                <a href="videos.html" class="nav-link active">Videos</a>
+                <a href="ai-assistant.html" class="nav-link">AI Assistant</a>
+                <a href="community.html" class="nav-link">Community</a>
+            </div>
+
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">
+                    <i class="fas fa-video" style="color: var(--warning);"></i>
+                    Smart Video Recommendations
+                </h1>
+                <p class="section-description">
+                    Enter any topic and discover the best educational YouTube videos curated by AI
+                </p>
+            </div>
+
+            <!-- Topic Input -->
+            <div class="topic-input-card">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1.25rem;">
+                    What topic do you want to learn?
+                </h3>
+                <div class="topic-input-wrapper">
+                    <input type="text" id="topicInput" class="form-input"
+                        placeholder="e.g., JavaScript Tutorial, Organic Chemistry, Linear Algebra...">
+                    <button class="btn btn-primary" id="searchBtn">
+                        <i class="fas fa-search"></i> Find Videos
+                    </button>
+                </div>
+                <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9375rem;">
+                    <i class="fas fa-lightbulb" style="color: var(--warning);"></i>
+                    AI will search and recommend the best educational videos for your topic.
+                </p>
+                <button class="btn btn-secondary btn-sm" id="configYouTubeBtn" style="margin-top: 1rem;">
+                    <i class="fas fa-cog"></i> Configure YouTube API Key
+                </button>
+            </div>
+
+            <!-- Videos Grid -->
+            <div id="videosGrid" class="videos-grid">
+                <div class="empty-state">
+                    <i class="fas fa-video"></i>
+                    <p>No videos yet!</p>
+                    <small>Enter a topic above to get AI-recommended videos</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Config Modal -->
+    <div id="apiConfigModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> API Configuration</h3>
+                <button class="modal-close" onclick="closeModal('apiConfigModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="apiConfigContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="common.js"></script>
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('searchBtn').addEventListener('click', searchVideos);
+            document.getElementById('topicInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchVideos();
+            });
+            document.getElementById('configYouTubeBtn').addEventListener('click', () => openAPIConfig('youtube'));
+        });
+
+        // Search Videos
+        async function searchVideos() {
+            const topic = document.getElementById('topicInput').value.trim();
+
+            if (!topic) {
+                showToast('Please enter a topic', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('searchBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+
+            try {
+                const videos = await searchYouTubeVideos(topic);
+                if (videos.length > 0) {
+                    renderVideos(videos);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-search"></i> Find Videos';
+            }
+        }
+
+        // Render Videos
+        function renderVideos(videos) {
+            const grid = document.getElementById('videosGrid');
+
+            grid.innerHTML = videos.map(video => {
+                const videoId = video.id.videoId;
+                const thumbnail = video.snippet.thumbnails.medium.url;
+                const title = video.snippet.title;
+                const channel = video.snippet.channelTitle;
+                const description = video.snippet.description;
+
+                return `
+                    <div class="video-card" onclick="openVideo('${videoId}')">
+                        <img src="${thumbnail}" alt="${escapeHtml(title)}" class="video-thumbnail" loading="lazy">
+                        <div class="video-info">
+                            <h3 class="video-title">${escapeHtml(title)}</h3>
+                            <p class="video-channel">
+                                <i class="fas fa-user-circle"></i> ${escapeHtml(channel)}
+                            </p>
+                            <div class="video-stats">
+                                <span><i class="fas fa-play-circle"></i> Watch on YouTube</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Open Video
+        function openVideo(videoId) {
+            window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Student Community - Connect with fellow students and share knowledge">
+    <title>Community - StudyHub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>StudyHub</span>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="flashcards.html" class="nav-link">Flashcards</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="ai-assistant.html" class="nav-link">AI Assistant</a>
+                <a href="community.html" class="nav-link active">Community</a>
+            </div>
+
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">
+                    <i class="fas fa-users" style="color: var(--success);"></i>
+                    Student Community
+                </h1>
+                <p class="section-description">
+                    Connect with fellow students, share knowledge, and help each other succeed
+                </p>
+            </div>
+
+            <!-- Controls -->
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="createPostBtn">
+                    <i class="fas fa-plus"></i> Create Post
+                </button>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <select id="categoryFilter" class="form-select" style="width: auto; min-width: 180px;">
+                        <option value="all">All Topics</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="General">General Discussion</option>
+                        <option value="Study Tips">Study Tips</option>
+                    </select>
+
+                    <select id="sortSelect" class="form-select" style="width: auto; min-width: 150px;">
+                        <option value="recent">Recent</option>
+                        <option value="popular">Popular</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Posts -->
+            <div id="postsContainer" class="community-posts">
+                <div class="empty-state">
+                    <i class="fas fa-comments"></i>
+                    <p>No posts yet!</p>
+                    <small>Be the first to start a discussion</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Create Post</h3>
+                <button class="modal-close" onclick="closeModal('createPostModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="postTitle">Title</label>
+                    <input type="text" id="postTitle" class="form-input"
+                        placeholder="Give your post a descriptive title...">
+                </div>
+
+                <div class="form-group">
+                    <label for="postContent">Content</label>
+                    <textarea id="postContent" class="form-input" rows="5"
+                        placeholder="Share your thoughts, questions, or knowledge..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="postCategory">Category</label>
+                    <select id="postCategory" class="form-select">
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="General">General Discussion</option>
+                        <option value="Study Tips">Study Tips</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('createPostModal')">Cancel</button>
+                <button class="btn btn-primary" id="savePostBtn">
+                    <i class="fas fa-paper-plane"></i> Post
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="common.js"></script>
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPosts();
+
+            document.getElementById('createPostBtn').addEventListener('click', () => openModal('createPostModal'));
+            document.getElementById('savePostBtn').addEventListener('click', savePost);
+            document.getElementById('categoryFilter').addEventListener('change', filterPosts);
+            document.getElementById('sortSelect').addEventListener('change', sortPosts);
+        });
+
+        // Save Post
+        function savePost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const category = document.getElementById('postCategory').value;
+
+            if (!title || !content) {
+                showToast('Please fill in title and content', 'error');
+                return;
+            }
+
+            const post = {
+                id: generateId(),
+                title,
+                content,
+                category,
+                author: 'Student',
+                likes: 0,
+                liked: false,
+                comments: [],
+                createdAt: new Date().toISOString()
+            };
+
+            const posts = AppState.posts;
+            posts.unshift(post);
+            AppState.posts = posts;
+
+            renderPosts();
+            closeModal('createPostModal');
+
+            // Clear form
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+
+            showToast('Post created successfully!', 'success');
+        }
+
+        // Render Posts
+        function renderPosts(filtered = null) {
+            const container = document.getElementById('postsContainer');
+            const posts = filtered !== null ? filtered : AppState.posts;
+
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <p>No posts yet!</p>
+                        <small>Be the first to start a discussion</small>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = posts.map(post => `
+                <div class="post-card" data-id="${post.id}">
+                    <div class="post-header">
+                        <div class="post-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="post-meta">
+                            <div class="post-author">${escapeHtml(post.author)}</div>
+                            <div class="post-time">${formatTimeAgo(post.createdAt)}</div>
+                        </div>
+                        <span class="post-category">${escapeHtml(post.category)}</span>
+                    </div>
+                    <h3 class="post-title">${escapeHtml(post.title)}</h3>
+                    <p class="post-content">${escapeHtml(post.content)}</p>
+                    <div class="post-actions">
+                        <button class="post-action ${post.liked ? 'active' : ''}" onclick="likePost('${post.id}')">
+                            <i class="fas fa-heart"></i> ${post.likes} ${post.likes === 1 ? 'Like' : 'Likes'}
+                        </button>
+                        <button class="post-action" onclick="showToast('Comments coming soon!', 'success')">
+                            <i class="fas fa-comment"></i> ${post.comments.length} Comments
+                        </button>
+                        <button class="post-action" onclick="deletePost('${post.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Like Post
+        function likePost(id) {
+            const posts = AppState.posts;
+            const post = posts.find(p => p.id === id);
+
+            if (post) {
+                if (post.liked) {
+                    post.likes--;
+                    post.liked = false;
+                } else {
+                    post.likes++;
+                    post.liked = true;
+                }
+                AppState.posts = posts;
+                renderPosts();
+            }
+        }
+
+        // Delete Post
+        function deletePost(id) {
+            if (!confirm('Delete this post?')) return;
+
+            const posts = AppState.posts;
+            AppState.posts = posts.filter(p => p.id !== id);
+            renderPosts();
+            showToast('Post deleted', 'success');
+        }
+
+        // Filter Posts
+        function filterPosts() {
+            const filter = document.getElementById('categoryFilter').value;
+            const posts = AppState.posts;
+
+            if (filter === 'all') {
+                renderPosts();
+            } else {
+                const filtered = posts.filter(p => p.category === filter);
+                renderPosts(filtered);
+            }
+        }
+
+        // Sort Posts
+        function sortPosts() {
+            const sortBy = document.getElementById('sortSelect').value;
+            const posts = [...AppState.posts];
+
+            if (sortBy === 'recent') {
+                posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            } else if (sortBy === 'popular') {
+                posts.sort((a, b) => b.likes - a.likes);
+            }
+
+            renderPosts(posts);
+        }
+    </script>
+</body>
+
+</html>

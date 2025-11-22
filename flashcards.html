@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Generated Flashcards - Enter any topic or upload documents">
+    <title>AI Flashcards - StudyHub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tab-btn.active {
+            color: var(--primary) !important;
+            border-bottom-color: var(--primary) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>StudyHub</span>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="flashcards.html" class="nav-link active">Flashcards</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="ai-assistant.html" class="nav-link">AI Assistant</a>
+                <a href="community.html" class="nav-link">Community</a>
+            </div>
+
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">
+                    <i class="fas fa-magic" style="color: var(--primary);"></i>
+                    AI Flashcard Generator
+                </h1>
+                <p class="section-description">
+                    Enter a topic or upload documents - AI will create comprehensive flashcards for you
+                </p>
+            </div>
+
+            <!-- Topic Input with Document Upload -->
+            <div class="topic-input-card">
+                <h3 style="margin-bottom: 1.5rem; color: var(--text-primary); font-size: 1.25rem;">
+                    Generate flashcards from a topic or document
+                </h3>
+
+                <!-- Tabs -->
+                <div
+                    style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light);">
+                    <button class="tab-btn active" id="topicTab" onclick="switchTab('topic')"
+                        style="background: none; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; font-family: inherit;">
+                        <i class="fas fa-keyboard"></i> Enter Topic
+                    </button>
+                    <button class="tab-btn" id="documentTab" onclick="switchTab('document')"
+                        style="background: none; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; font-family: inherit;">
+                        <i class="fas fa-file-upload"></i> Upload Document
+                    </button>
+                </div>
+
+                <!-- Topic Input Tab -->
+                <div id="topicInputSection">
+                    <div class="topic-input-wrapper">
+                        <input type="text" id="topicInput" class="form-input"
+                            placeholder="e.g., Photosynthesis, React Hooks, World War II...">
+                        <button class="btn btn-primary" id="generateBtn">
+                            <i class="fas fa-magic"></i> Generate Flashcards
+                        </button>
+                    </div>
+                    <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9375rem;">
+                        <i class="fas fa-lightbulb" style="color: var(--warning);"></i>
+                        AI will create 8 flashcards on your topic.
+                    </p>
+                </div>
+
+                <!-- Document Upload Tab -->
+                <div id="documentUploadSection" style="display: none;">
+                    <div id="dropZone"
+                        style="border: 3px dashed var(--border-medium); border-radius: var(--radius-lg); padding: 3rem 2rem; text-align: center; background: var(--bg-secondary); cursor: pointer; transition: all 0.3s;">
+                        <i class="fas fa-cloud-upload-alt"
+                            style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4 style="font-size: 1.125rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            Drop your document here or click to browse
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.9375rem; margin-bottom: 1rem;">
+                            Supports: .txt, .md files
+                        </p>
+                        <input type="file" id="fileInput" accept=".txt,.md" style="display: none;">
+                        <button class="btn btn-secondary" type="button"
+                            onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                    </div>
+
+                    <div id="fileInfo" style="margin-top: 1rem; display: none;">
+                        <div
+                            style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--primary);"></i>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: var(--text-primary);" id="fileName"></div>
+                                <div style="font-size: 0.875rem; color: var(--text-muted);" id="fileSize"></div>
+                            </div>
+                            <button class="btn btn-primary" id="processDocBtn">
+                                <i class="fas fa-magic"></i> Generate Flashcards
+                            </button>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9375rem;">
+                        <i class="fas fa-info-circle" style="color: var(--accent);"></i>
+                        Upload your study notes or articles. AI will analyze and create flashcards.
+                    </p>
+                </div>
+
+                <button class="btn btn-secondary btn-sm" id="configAIBtn" style="margin-top: 1.5rem;">
+                    <i class="fas fa-cog"></i> Configure DeepSeek API Key
+                </button>
+            </div>
+
+            <!-- Flashcard Controls -->
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-success" id="studyModeBtn">
+                        <i class="fas fa-book-reader"></i> Study Mode
+                    </button>
+                    <select id="categoryFilter" class="form-select" style="width: auto; min-width: 200px;">
+                        <option value="all">All Categories</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="English">English</option>
+                        <option value="History">History</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div style="color: var(--text-secondary); font-weight: 600;">
+                    <i class="fas fa-clone"></i>
+                    <span id="flashcardCount">0</span> Flashcards
+                </div>
+            </div>
+
+            <!-- Flashcards Grid -->
+            <div id="flashcardsGrid" class="flashcards-grid">
+                <div class="empty-state">
+                    <i class="fas fa-magic"></i>
+                    <p>No flashcards yet!</p>
+                    <small>Enter a topic or upload a document to generate flashcards</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Mode Modal -->
+    <div id="studyModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-book-reader"></i> Study Mode</h3>
+                <button class="modal-close" onclick="closeModal('studyModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="studyCardContainer"
+                    style="min-height: 400px; display: flex; align-items: center; justify-content: center;">
+                </div>
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light);">
+                    <button class="btn btn-secondary" id="prevCardBtn">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span id="studyProgress"
+                        style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary);">0 / 0</span>
+                    <button class="btn btn-primary" id="nextCardBtn">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Config Modal -->
+    <div id="apiConfigModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> API Configuration</h3>
+                <button class="modal-close" onclick="closeModal('apiConfigModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="apiConfigContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Flashcard Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Flashcard</h3>
+                <button class="modal-close" onclick="closeModal('editModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editQuestion">Question/Front</label>
+                    <textarea id="editQuestion" class="form-input" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editAnswer">Answer/Back</label>
+                    <textarea id="editAnswer" class="form-input" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveEditBtn">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="common.js"></script>
+    <script src="flashcards-app.js"></script>
+</body>
+
+</html>

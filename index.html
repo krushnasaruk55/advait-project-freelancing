@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="StudyHub - AI-powered learning platform for college students. Get flashcards, video recommendations, and study help.">
+    <title>StudyHub - Smart Learning for Students</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>StudyHub</span>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="flashcards.html" class="nav-link">Flashcards</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="ai-assistant.html" class="nav-link">AI Assistant</a>
+                <a href="community.html" class="nav-link">Community</a>
+            </div>
+
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Study Smarter with <span class="highlight">AI</span>
+            </h1>
+            <p class="hero-subtitle">
+                Enter any topic and let AI create flashcards, recommend the best YouTube videos,
+                and help you understand complex concepts. Your personal study companion. 🎓
+            </p>
+
+            <div class="hero-buttons">
+                <a href="flashcards.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-magic"></i> Generate Flashcards
+                </a>
+                <a href="videos.html" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-video"></i> Find Videos
+                </a>
+                <a href="ai-assistant.html" class="btn btn-accent btn-lg">
+                    <i class="fas fa-robot"></i> AI Assistant
+                </a>
+            </div>
+
+            <div
+                style="margin-top: 3rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; font-size: 0.9375rem; color: var(--text-secondary);">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-clone" style="color: var(--primary);"></i>
+                    <span><strong id="totalFlashcards">0</strong> Flashcards Generated</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-comments" style="color: var(--primary);"></i>
+                    <span><strong id="totalPosts">0</strong> Community Posts</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-description">
+                    Three simple steps to supercharge your studying
+                </p>
+            </div>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <div class="card animate-on-scroll delay-100" style="text-align: center;">
+                    <div
+                        style="width: 64px; height: 64px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <h3 class="card-title">1. Enter a Topic</h3>
+                    <p class="card-description">
+                        Type in what you're studying - "Photosynthesis", "React Hooks", "World War II", anything!
+                    </p>
+                </div>
+
+                <div class="card animate-on-scroll delay-200" style="text-align: center;">
+                    <div
+                        style="width: 64px; height: 64px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="card-title">2. AI Does the Work</h3>
+                    <p class="card-description">
+                        Our AI instantly generates flashcards, finds the best videos, and prepares study materials
+                    </p>
+                </div>
+
+                <div class="card animate-on-scroll delay-300" style="text-align: center;">
+                    <div
+                        style="width: 64px; height: 64px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="card-title">3. Start Learning</h3>
+                    <p class="card-description">
+                        Study with flashcards, watch recommended videos, and ask AI questions anytime
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Everything You Need to Excel</h2>
+                <p class="section-description">
+                    Powerful features designed for college students
+                </p>
+            </div>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <div class="card animate-on-scroll delay-100">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #e0e7ff; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem;">
+                            <i class="fas fa-clone"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">AI
+                            Flashcards</h3>
+                    </div>
+                    <p class="card-description">
+                        Enter any topic and get 8-10 comprehensive flashcards instantly. Study mode, flip cards, and
+                        track progress.
+                    </p>
+                    <a href="flashcards.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Try Now <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card animate-on-scroll delay-200">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #fef3c7; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 1.5rem;">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">Smart
+                            Video Search</h3>
+                    </div>
+                    <p class="card-description">
+                        AI finds and curates the best educational YouTube videos for your topic. Save hours of
+                        searching.
+                    </p>
+                    <a href="videos.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Find Videos <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card animate-on-scroll delay-300">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #cffafe; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #06b6d4; font-size: 1.5rem;">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">24/7 AI
+                            Tutor</h3>
+                    </div>
+                    <p class="card-description">
+                        Ask questions, get explanations, request examples. Your personal study assistant powered by
+                        DeepSeek AI.
+                    </p>
+                    <a href="ai-assistant.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Chat Now <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card animate-on-scroll delay-100">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #d1fae5; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.5rem;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">Student
+                            Community</h3>
+                    </div>
+                    <p class="card-description">
+                        Connect with other students, share resources, ask questions, and help each other succeed.
+                    </p>
+                    <a href="community.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Join Community <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card animate-on-scroll delay-200">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #fce7f3; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #ec4899; font-size: 1.5rem;">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">Study
+                            Mode</h3>
+                    </div>
+                    <p class="card-description">
+                        Interactive study sessions with your flashcards. Track what you know and focus on what you need
+                        to review.
+                    </p>
+                    <a href="flashcards.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Start Studying <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card animate-on-scroll delay-300">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #e0e7ff; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem;">
+                            <i class="fas fa-save"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">
+                            Auto-Save</h3>
+                    </div>
+                    <p class="card-description">
+                        All your flashcards, videos, and conversations are automatically saved. Access them anytime,
+                        anywhere.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section">
+        <div class="container">
+            <div
+                style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 4rem 2rem; border-radius: 2rem; text-align: center; color: white;">
+                <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1.5rem; color: white;">
+                    Ready to Transform Your Studying?
+                </h2>
+                <p
+                    style="font-size: 1.25rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Join thousands of students who are studying smarter with AI. Get started in seconds - no sign up
+                    required!
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="flashcards.html" class="btn"
+                        style="background: white; color: var(--primary); font-size: 1.125rem; padding: 1.125rem 2.25rem;">
+                        <i class="fas fa-magic"></i> Generate Your First Flashcards
+                    </a>
+                    <a href="ai-assistant.html" class="btn"
+                        style="background: transparent; color: white; border: 2px solid white; font-size: 1.125rem; padding: 1.125rem 2.25rem;">
+                        <i class="fas fa-robot"></i> Talk to AI
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        style="background: var(--bg-secondary); padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border-light);">
+        <div class="container">
+            <div style="margin-bottom: 2rem;">
+                <div
+                    style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>StudyHub</span>
+                </div>
+                <p style="color: var(--text-secondary);">AI-powered learning for college students</p>
+            </div>
+
+            <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                <a href="index.html" style="color: var(--text-secondary); font-weight: 500;">Home</a>
+                <a href="flashcards.html" style="color: var(--text-secondary); font-weight: 500;">Flashcards</a>
+                <a href="videos.html" style="color: var(--text-secondary); font-weight: 500;">Videos</a>
+                <a href="ai-assistant.html" style="color: var(--text-secondary); font-weight: 500;">AI Assistant</a>
+                <a href="community.html" style="color: var(--text-secondary); font-weight: 500;">Community</a>
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.875rem;">
+                Made with ❤️ for students everywhere
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    </div>
+
+    <div class="card" style="text-align: center;">
+        <div
+            style="width: 64px; height: 64px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h3 class="card-title">3. Start Learning</h3>
+        <p class="card-description">
+            Study with flashcards, watch recommended videos, and ask AI questions anytime
+        </p>
+    </div>
+    </div>
+    </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Everything You Need to Excel</h2>
+                <p class="section-description">
+                    Powerful features designed for college students
+                </p>
+            </div>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <div class="card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #e0e7ff; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem;">
+                            <i class="fas fa-clone"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">AI
+                            Flashcards</h3>
+                    </div>
+                    <p class="card-description">
+                        Enter any topic and get 8-10 comprehensive flashcards instantly. Study mode, flip cards, and
+                        track progress.
+                    </p>
+                    <a href="flashcards.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Try Now <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #fef3c7; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 1.5rem;">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">Smart
+                            Video Search</h3>
+                    </div>
+                    <p class="card-description">
+                        AI finds and curates the best educational YouTube videos for your topic. Save hours of
+                        searching.
+                    </p>
+                    <a href="videos.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Find Videos <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #cffafe; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #06b6d4; font-size: 1.5rem;">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">24/7 AI
+                            Tutor</h3>
+                    </div>
+                    <p class="card-description">
+                        Ask questions, get explanations, request examples. Your personal study assistant powered by
+                        DeepSeek AI.
+                    </p>
+                    <a href="ai-assistant.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Chat Now <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #d1fae5; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.5rem;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">Student
+                            Community</h3>
+                    </div>
+                    <p class="card-description">
+                        Connect with other students, share resources, ask questions, and help each other succeed.
+                    </p>
+                    <a href="community.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Join Community <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #fce7f3; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #ec4899; font-size: 1.5rem;">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">Study
+                            Mode</h3>
+                    </div>
+                    <p class="card-description">
+                        Interactive study sessions with your flashcards. Track what you know and focus on what you need
+                        to review.
+                    </p>
+                    <a href="flashcards.html" class="btn btn-secondary"
+                        style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        Start Studying <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div
+                            style="width: 48px; height: 48px; background: #e0e7ff; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem;">
+                            <i class="fas fa-save"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">
+                            Auto-Save</h3>
+                    </div>
+                    <p class="card-description">
+                        All your flashcards, videos, and conversations are automatically saved. Access them anytime,
+                        anywhere.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section">
+        <div class="container">
+            <div
+                style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 4rem 2rem; border-radius: 2rem; text-align: center; color: white;">
+                <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1.5rem; color: white;">
+                    Ready to Transform Your Studying?
+                </h2>
+                <p
+                    style="font-size: 1.25rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Join thousands of students who are studying smarter with AI. Get started in seconds - no sign up
+                    required!
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="flashcards.html" class="btn"
+                        style="background: white; color: var(--primary); font-size: 1.125rem; padding: 1.125rem 2.25rem;">
+                        <i class="fas fa-magic"></i> Generate Your First Flashcards
+                    </a>
+                    <a href="ai-assistant.html" class="btn"
+                        style="background: transparent; color: white; border: 2px solid white; font-size: 1.125rem; padding: 1.125rem 2.25rem;">
+                        <i class="fas fa-robot"></i> Talk to AI
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        style="background: var(--bg-secondary); padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border-light);">
+        <div class="container">
+            <div style="margin-bottom: 2rem;">
+                <div
+                    style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>StudyHub</span>
+                </div>
+                <p style="color: var(--text-secondary);">AI-powered learning for college students</p>
+            </div>
+
+            <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                <a href="index.html" style="color: var(--text-secondary); font-weight: 500;">Home</a>
+                <a href="flashcards.html" style="color: var(--text-secondary); font-weight: 500;">Flashcards</a>
+                <a href="videos.html" style="color: var(--text-secondary); font-weight: 500;">Videos</a>
+                <a href="ai-assistant.html" style="color: var(--text-secondary); font-weight: 500;">AI Assistant</a>
+                <a href="community.html" style="color: var(--text-secondary); font-weight: 500;">Community</a>
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.875rem;">
+                Made with ❤️ for students everywhere
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="common.js"></script>
+    <script>
+        // Update stats on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const flashcards = AppState.flashcards;
+            const posts = AppState.posts;
+
+            document.getElementById('totalFlashcards').textContent = flashcards.length;
+            document.getElementById('totalPosts').textContent = posts.length;
+
+            // Scroll Animation Observer
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+
+</html>
